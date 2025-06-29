@@ -401,7 +401,12 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
         }
         
         if (peca_selecionada_tipo.equals("peao") && (linha_destino == 7 || linha_destino == 0)) {
-            String nova_peca = Control.getController().promocaoPeao();
+        	String nova_peca = Control.getController().promocaoPeao(this);
+        	if (nova_peca == null) {
+        	    JOptionPane.showMessageDialog(this, "Promoção cancelada.");
+        	    fimDaJogada(1); // Não troca o turno nem mexe nada
+        	    return;
+        	}
             Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, 
                                                     nova_peca, peca_selecionada_cor);
             Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null, null);
