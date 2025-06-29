@@ -1,0 +1,92 @@
+Casos de teste
+
+- Bispo
+
+* movimento: 24 testes
+
+-> Testar movimentos diagonais - 8
+-> Testar movimento incorreto - 8
+-> Testar movimento onde peças estão no caminho - 8 
+
+* ataque: 32 testes
+
+-> Testar movimentos diagonais - 8 
+-> Testar movimento incorreto - 8
+-> Testar movimento onde peças estão no caminho - 8
+-> Testar ataque a peca do próprio jogador - 8
+
+- Cavalo
+
+* movimento: 24 testes
+
+-> Testar movimentos - 8
+-> Testar movimento incorreto - 8
+-> Testar movimento onde o destino está ocupado - 8 
+
+* ataque: 24 testes
+
+-> Testar movimentos - 8 
+-> Testar movimento incorreto - 8
+-> Testar ataque a peca do próprio jogador - 8
+
+- Rei: 
+
+* movimento: 24 testes
+
+-> Testar movimentos - 8
+-> Testar movimento incorreto - 8
+-> Testar movimento onde o destino está ocupado - 8
+
+* ataque: 24 testes
+
+-> Testar movimentos - 8 
+-> Testar movimento incorreto - 8
+-> Testar ataque a peca do próprio jogador - 8
+
+- Peao: (ok)
+
+* movimento: 12 testes
+
+-> Testar movimentos - 4 
+-> Testar movimento incorreto - andar mais de 2 casas, andar 2 casas sabendo que o peao esta fora da posicao original, se pecas estao no caminho 			
+-> Testar movimento onde o destino está ocupado - 4
+(É o dobro pois peao pode andar 2 casas ou 1)
+
+* ataque: 6 testes
+
+-> Testar movimentos - 2
+-> Testar movimento incorreto - 2
+-> Testar ataque a peca do próprio jogador - 2
+
+- Rainha
+
+* movimento: 24 testes
+
+-> Testar movimentos - 8 
+-> Testar movimento incorreto - 8
+-> Testar movimento onde o destino está ocupado - 8
+
+* ataque: 24 testes
+
+-> Testar movimentos - 8
+-> Testar movimento incorreto - 8
+-> Testar ataque a peca do próprio jogador - 8
+
+- Torre
+
+* movimento: 12 testes
+
+-> Testar movimentos - 4 
+-> Testar movimento incorreto - 4
+-> Testar movimento onde o destino está ocupado - 4
+
+* ataque: 12 testes
+
+-> Testar movimentos - 4
+-> Testar movimento incorreto - 4
+-> Testar ataque a peca do próprio jogador - 4
+
+- Tabuleiro: 2 testes 
+
+*Testar se as pecas estão na posicao certa - 1
+*Testar se as pecas estão na posicao errada - 1

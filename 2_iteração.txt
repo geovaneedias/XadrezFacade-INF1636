@@ -1,0 +1,25 @@
+2ª Iteração
+
+- Xeque (Model)
+- Xeque descoberto (Model)
+- Xeque-Mate (Model)
+- Promoção do Peão (Model)
+- Roque (Model)
+- Tabuleiro:
+	*Colocar as imagens das peças no tabuleiro
+
+- Janela Inicial
+- Jogadas:
+	*Criar funcionalidades de mouse
+	*Impedir que o jogador selecione uma peça adversária
+	*Ao selecionar uma peça, mostrar todas as casas para aonde a peça poderá ser movimentada, incluindo as casas que
+	resultem em captura de uma peça do adversário, por meio de mudança de cor
+	*Término de uma jogada
+	*Reiniciu de uma jogada
+	*Roque (View)
+	*Promoção do peão (View)
+
+- Xeque, Xeque-Mate e "Congelamento"
+- Salvar partida 
+
+	
