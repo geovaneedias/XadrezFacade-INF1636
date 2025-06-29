@@ -2,6 +2,8 @@ package Controller;
 
 import javax.swing.*;
 import Model.XadrezFacade;
+
+import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -303,19 +305,21 @@ public class Control {
         }
     }
     
-    public String promocaoPeao() {
-        String[] opcoes = {"rainha", "torre", "bispo", "cavalo"};
+    public String promocaoPeao(Component parent) {
+        Object[] opcoes = {"rainha", "torre", "bispo", "cavalo"};
         String escolha = (String) JOptionPane.showInputDialog(
-            null,
-            "Escolha a peça para promoção:",
-            "Promoção de Peão",
-            JOptionPane.PLAIN_MESSAGE,
-            null,
-            opcoes,
-            opcoes[0]
-        );
-        return escolha != null ? escolha : "rainha"; // Default: rainha
+        	    null,
+        	    "Escolha a peça para promoção:",
+        	    "Promoção de Peão",
+        	    JOptionPane.QUESTION_MESSAGE,
+        	    null,
+        	    opcoes,
+        	    "rainha"
+        	);
+        return escolha; // pode ser null se cancelar
     }
+
+
     
     private boolean existeLanceQueRemoveXeque(int linha, int coluna, String cor_rei) {
         for (int origem_linha = 0; origem_linha < 8; origem_linha++) {
