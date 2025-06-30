@@ -128,64 +128,105 @@ public class Control {
         }
     }
     
-    public boolean roque(int linha, int coluna, int linha_antiga, int coluna_antiga, String tipoPeca, String corPeca) {
-        int inicio = Math.min(coluna, coluna_antiga) + 1;
-        int fim = Math.max(coluna, coluna_antiga);
-        
-        for (int cont = inicio; cont < fim; cont++) {
-            if (facade.getTipoPeca(linha_antiga, cont) != null) {
-                return false;
-            }
-        }
-        
-        if (corPeca.equals("branco")) {
-            if (!roque_disponivel_jogador1 || rei_ja_movimentou_jogador1) {
-                return false;
-            }
-            
-            if (coluna != 0) {
-                if (torre2_ja_movimentou_jogador1) {
-                    return false;
-                }
-                facade.atualizaTabuleiro(linha_antiga, coluna_antiga + 1, "torre", "branco");
-                facade.atualizaTabuleiro(linha, coluna - 1, tipoPeca, corPeca);
-            } else {
-                if (torre1_ja_movimentou_jogador1) {
-                    return false;
-                }
-                facade.atualizaTabuleiro(linha_antiga, coluna_antiga - 1, "torre", "branco");
-                facade.atualizaTabuleiro(linha, coluna + 2, tipoPeca, corPeca);
-            }
-            
+    public void descobreRei(String cor) {
+        if ("branco".equals(cor)) {
             rei_ja_movimentou_jogador1 = true;
-            roque_disponivel_jogador1 = false;
         } else {
-            if (!roque_disponivel_jogador2 || rei_ja_movimentou_jogador2) {
-                return false;
-            }
-            
-            if (coluna != 0) {
-                if (torre2_ja_movimentou_jogador2) {
-                    return false;
-                }
-                facade.atualizaTabuleiro(linha_antiga, coluna_antiga + 1, "torre", "preto");
-                facade.atualizaTabuleiro(linha, coluna - 1, tipoPeca, corPeca);
-            } else {
-                if (torre1_ja_movimentou_jogador2) {
-                    return false;
-                }
-                facade.atualizaTabuleiro(linha_antiga, coluna_antiga - 1, "torre", "preto");
-                facade.atualizaTabuleiro(linha, coluna + 2, tipoPeca, corPeca);
-            }
-            
             rei_ja_movimentou_jogador2 = true;
-            roque_disponivel_jogador2 = false;
         }
-        
-        facade.atualizaTabuleiro(linha_antiga, coluna_antiga, null, null);
-        facade.atualizaTabuleiro(linha, coluna, null, null);
+    }
+
+    
+    public boolean roque(int linhaTorre, int colunaTorre, int linhaRei, int colunaRei, String tipoPeca, String corPeca) {
+        // Verifica se é realmente um rei que está tentando fazer roque
+        if (!tipoPeca.equals("rei")) {
+            return false;
+        }
+
+        // Verifica se o rei já se moveu
+        if ((corPeca.equals("branco") && rei_ja_movimentou_jogador1) ||
+            (corPeca.equals("preto") && rei_ja_movimentou_jogador2)) {
+            return false;
+        }
+
+        // Verifica se a torre está na mesma linha do rei
+        if (linhaTorre != linhaRei) {
+            return false;
+        }
+
+        // Verifica se a torre está na posição correta para o roque (coluna 0 ou 7)
+        if (!(colunaTorre == 0 || colunaTorre == 7)) {
+            return false;
+        }
+
+        // Verifica se a torre selecionada é válida
+        String tipoTorre = facade.getTipoPeca(linhaTorre, colunaTorre);
+        String corTorre = facade.getCorPeca(linhaTorre, colunaTorre);
+
+        if (!"torre".equals(tipoTorre) || !corPeca.equals(corTorre)) {
+            return false;
+        }
+
+        // Verifica se a torre já se moveu
+        if (corPeca.equals("branco")) {
+            if (colunaTorre == 0 && torre1_ja_movimentou_jogador1) return false;
+            if (colunaTorre == 7 && torre2_ja_movimentou_jogador1) return false;
+        } else {
+            if (colunaTorre == 0 && torre1_ja_movimentou_jogador2) return false;
+            if (colunaTorre == 7 && torre2_ja_movimentou_jogador2) return false;
+        }
+
+        // Verifica se as casas entre o rei e a torre estão vazias
+        int direcao = colunaTorre < colunaRei ? -1 : 1; // -1 = roque grande, 1 = roque pequeno
+        int colunaAtual = colunaRei + direcao;
+
+        while (colunaAtual != colunaTorre) {
+            if (facade.getTipoPeca(linhaRei, colunaAtual) != null) {
+                return false; // Há peça entre o rei e a torre
+            }
+            colunaAtual += direcao;
+        }
+
+        // Verifica se o rei está em xeque
+        if (corPeca.equals("branco") ? rei_esta_em_xeque_jogador1 : rei_esta_em_xeque_jogador2) {
+            return false;
+        }
+
+        // Verifica se o rei vai passar por alguma casa em xeque (inclusive a final)
+        int pos1 = colunaRei + direcao;
+        int pos2 = colunaRei + 2 * direcao;
+
+        // Substitua as chamadas a seguir por sua lógica real de verificação de ataque, se tiver
+ //       if (facade.casaEmXeque(linhaRei, pos1, corPeca) || facade.casaEmXeque(linhaRei, pos2, corPeca)) {
+  //          return false;
+  //      }
+
+        // Executa o roque
+        int novaColunaRei = colunaRei + 2 * direcao;
+        int novaColunaTorre = colunaRei + direcao;
+
+        // Move o rei
+        facade.atualizaTabuleiro(linhaRei, colunaRei, null, null);
+        facade.atualizaTabuleiro(linhaRei, novaColunaRei, "rei", corPeca);
+
+        // Move a torre
+        facade.atualizaTabuleiro(linhaTorre, colunaTorre, null, null);
+        facade.atualizaTabuleiro(linhaRei, novaColunaTorre, "torre", corPeca);
+
+        // Atualiza os estados de movimentação
+        if (corPeca.equals("branco")) {
+            rei_ja_movimentou_jogador1 = true;
+            if (colunaTorre == 0) torre1_ja_movimentou_jogador1 = true;
+            else torre2_ja_movimentou_jogador1 = true;
+        } else {
+            rei_ja_movimentou_jogador2 = true;
+            if (colunaTorre == 0) torre1_ja_movimentou_jogador2 = true;
+            else torre2_ja_movimentou_jogador2 = true;
+        }
+
         return true;
     }
+
     
     private boolean estaDentroDosLimites(int linha, int coluna) {
         return linha >= 0 && linha < 8 && coluna >= 0 && coluna < 8;
@@ -502,7 +543,7 @@ public class Control {
     public void setFacade(XadrezFacade facade) {
         this.facade = facade;
     }
-
+    
     public static void main(String[] args) {
         try {
             Control control = Control.getController();
@@ -513,4 +554,5 @@ public class Control {
             e.printStackTrace();
         }
     }
+
 }
