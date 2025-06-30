@@ -385,10 +385,10 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
         if (!escolhe_casa_destino) {
             return;
         }
-        
+
         int linha_destino = coordenada_y;
         int coluna_destino = coordenada_x;
-        
+
         String turno_atual = Control.getController().getTurno();
         boolean rei_em_xeque = turno_atual.equals("preto") ? 
             Control.getController().getEstadoReiJogador2() : 
@@ -399,27 +399,42 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
             fimDaJogada(1);
             return;
         }
-        
+
+        // Promoção de peão
         if (peca_selecionada_tipo.equals("peao") && (linha_destino == 7 || linha_destino == 0)) {
-        	String nova_peca = Control.getController().promocaoPeao(this);
-        	if (nova_peca == null) {
-        	    JOptionPane.showMessageDialog(this, "Promoção cancelada.");
-        	    fimDaJogada(1); // Não troca o turno nem mexe nada
-        	    return;
-        	}
+            String nova_peca = Control.getController().promocaoPeao(this);
+            if (nova_peca == null) {
+                JOptionPane.showMessageDialog(this, "Promoção cancelada.");
+                fimDaJogada(1); // Não troca o turno nem mexe nada
+                return;
+            }
             Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, 
-                                                    nova_peca, peca_selecionada_cor);
+                                                      nova_peca, peca_selecionada_cor);
             Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null, null);
             fimDaJogada(0);
             return;
         }
-        
+
+        // Se a peça for uma torre, registra que ela foi movimentada
+        if (peca_selecionada_tipo.equals("torre")) {
+            Control.getController().descobreTorre(coluna_antiga, peca_selecionada_cor);
+        }
+
+        // Se a peça for o rei, registra que ele foi movimentado
+        if (peca_selecionada_tipo.equals("rei")) {
+            Control.getController().descobreRei(peca_selecionada_cor);
+        }
+
+
+
+        // Movimenta a peça
         Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, 
-                                                peca_selecionada_tipo, peca_selecionada_cor);
+                                                  peca_selecionada_tipo, peca_selecionada_cor);
         Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null, null);
-        
+
         fimDaJogada(0);
     }
+
 	
     private void fimDaJogada(int condicao) {
         notifica_click_em_peca = true;
